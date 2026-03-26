@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Main : MonoBehaviour {
     static private Main S;
@@ -13,11 +14,23 @@ public class Main : MonoBehaviour {
     public float enemyInsetDefault = 1.5f;
     public float gameRestartDelay = 2;
 
+    [Header("UI")]
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI highScoreText;
+
+    [Header("Dynamic")]
+    public int score = 0;
+    public int highScore = 0;
+
     private BoundsCheck bndCheck;
 
     void Awake() {
         S = this;
         bndCheck = GetComponent<BoundsCheck>();
+        highScore = PlayerPrefs.GetInt("SHMUP_HIGHSCORE", 0);
+
+        UpdateScoreUI();
+
         if (spawnEnemies) {
             Invoke(nameof(SpawnEnemy), 1f / enemySpawnPerSecond);
         }
@@ -44,6 +57,27 @@ public class Main : MonoBehaviour {
         }
     }
 
+    public void AddScore(int n) {
+        score += n;
+
+        if (score > highScore) {
+            highScore = score;
+            PlayerPrefs.SetInt("SHMUP_HIGHSCORE", highScore);
+        }
+
+        UpdateScoreUI();
+    }
+
+    void UpdateScoreUI() {
+        if (scoreText != null) {
+            scoreText.text = "Score: " + score;
+        }
+
+        if (highScoreText != null) {
+            highScoreText.text = "High Score: " + highScore;
+        }
+    }
+
     void DelayedRestart() {
         Invoke(nameof(Restart), gameRestartDelay);
     }
@@ -54,5 +88,9 @@ public class Main : MonoBehaviour {
 
     static public void HERO_DIED() {
         S.DelayedRestart();
+    }
+
+    static public void ADD_SCORE(int n) {
+        S.AddScore(n);
     }
 }

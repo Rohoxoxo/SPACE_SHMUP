@@ -9,7 +9,6 @@ public class Enemy : MonoBehaviour {
     public float fireRate = 0.3f;
     public float health = 10;
     public int score = 100;
-    public float powerUpDropChance = 0.5f;
 
     protected BoundsCheck bndCheck;
 
@@ -44,6 +43,7 @@ public class Enemy : MonoBehaviour {
         GameObject otherGO = coll.gameObject;
         if (otherGO.GetComponent<ProjectileHero>() != null) {
             Destroy(otherGO);
+            Main.ADD_SCORE(score);
             Destroy(gameObject);
         } else {
             Debug.Log("Enemy hit by non-ProjectileHero: " + otherGO.name);

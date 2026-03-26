@@ -99,8 +99,7 @@ MonoBehaviour:
   speed: 10
   fireRate: 0.3
   health: 10
-  score: 100
-  powerUpDropChance: 0.25
+  score: 10
 --- !u!1001 &8470867197320420769
 PrefabInstance:
   m_ObjectHideFlags: 0
